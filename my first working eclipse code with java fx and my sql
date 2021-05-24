@@ -1,0 +1,203 @@
+package application;
+	
+import java.sql.Connection;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
+
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.*;
+
+
+
+public class Main extends Application {
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			  //creating a Group object 
+		      Group group = new Group(); 
+		       
+		      //Creating a Scene by passing the group object, height and width   
+		      Scene scene = new Scene(group ,500, 500); 
+		      
+		      //setting color to the scene 
+		      Button b1=new Button("submit ");
+		      b1.setScaleX(2);
+		      b1.setScaleY(2);
+		      b1.setLayoutX(120);
+		      b1.setLayoutY(350);
+		      TextField tx=new TextField();
+		      TextField tt=new TextField();
+		      tx.setLayoutX(180);
+		      tx.setLayoutY(100);
+		      tx.setScaleX(2);
+		      tx.setScaleY(2);
+		      tt.setScaleX(1.13);
+		      tt.setScaleY(1);
+		      tt.setText("enter password");
+		      tt.setFont(new Font(20));
+		      tt.setLayoutX(120);
+		      tt.setLayoutY(250);
+		      
+		      //TextView t1=new TextView();
+		      Text ttt=new Text();
+		      ttt.setText("Login page ");
+		      ttt.setFill(Color.AZURE);
+		      ttt.setFont(new Font(45));
+		      ttt.setX(180);
+		      ttt.setY(40);
+		      
+		      scene.setFill(Color.CORNFLOWERBLUE);
+		      
+		      tx.setText(" enter username");
+		      group.getChildren().add(tx);
+		      group.getChildren().add(b1);
+		      group.getChildren().add(ttt);
+		      group .getChildren().add(tt);
+		     tx.setPromptText(" hellow i am anupma ");
+		      //Setting the title to Stage. 
+		      primaryStage.setTitle("Sample Application");
+		 /* EventHandler <MouseEvent> eventhadler=new EventHandler<MouseEvent>() {
+		    	
+		    	public void handle(MouseEvent e)
+		    	{
+		    		//System.out.println("you have clicked mouse event ");
+		    	}
+		    	
+		    }
+		    
+		    //b1.addEventFilter(MouseEvent.MOUSE_CLICKED,eventhadler);
+		   //   */
+		      b1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		    	  public void handle(MouseEvent e)
+		    	  {
+		    		  System.out.print("heloow mouse ");
+		    	  }
+		      }
+		      
+		    		  );
+		      tx.setOnKeyPressed( new EventHandler<KeyEvent> () {
+		    	  public void handle(KeyEvent ke)
+		    	  {
+		    		  System.out.println(" key pressed ");
+		    		  tt.setText("we succesdd ");
+		    		  
+		    		  
+		    	  }
+		      });
+		      Random rand=new Random();
+		      int user_id=rand.nextInt();
+		      int pass=rand.nextInt();
+		      String user=Integer.toString(user_id);
+		      String pas=Integer.toString(pass);
+		      String stt="insert into mydb.user_detail values"
+		      		+ "("
+		      		+ user+","
+		      				+ pas+");";
+		      
+
+				String st="insert into my_database.train values(54321);";
+				  String jdbcUrl = "jdbc:mysql://localhost:3306/mysql";
+				    String username = "root";
+				    String password = "12345";
+				    Connection conn = null;
+				    Statement stmt = null;
+
+				    try {
+
+				      conn = DriverManager.getConnection(jdbcUrl, username, password);
+				      stmt = conn.createStatement();
+
+				      stmt.executeUpdate(st);
+
+				      System.out.println("Table created");
+
+				    } catch (SQLException e) {
+				      e.printStackTrace();
+				    } finally {
+				      try {
+				        // Close connection
+				        if (stmt != null) {
+				          stmt.close();
+				        }
+				        if (conn != null) {
+				          conn.close();
+				        }
+				      } catch (Exception e) {
+				        e.printStackTrace();
+				      }
+				    }
+				System.out.println("hello world");
+				
+		      
+		      		
+		      
+		      
+		      //Adding the scene to Stage 
+		      primaryStage.setScene(scene); 
+		       
+		      //Displaying the contents of the stage 
+		      primaryStage.show();
+	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+
+		String st="insert into my_database.train values(13123);";
+		  String jdbcUrl = "jdbc:mysql://localhost:3306/mysql";
+		    String username = "root";
+		    String password = "12345";
+		    Connection conn = null;
+		    Statement stmt = null;
+
+		    try {
+
+		      conn = DriverManager.getConnection(jdbcUrl, username, password);
+		      stmt = conn.createStatement();
+
+		      stmt.executeUpdate(st);
+
+		      System.out.println("Table created");
+
+		    } catch (SQLException e) {
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		System.out.println("hello world");
+		
+	}
+}
