@@ -1,0 +1,510 @@
+package application;
+	
+import java.sql.Connection;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
+
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.*;
+
+
+
+public class Main extends Application {
+
+	Group group = new Group(); 
+	Button b111=new Button();
+	Button b222=new Button();
+	Button level_1=new Button();
+	Button level_2=new Button();
+	Button level_3=new Button();
+	public void start(Stage primaryStage) {
+		try {
+			  //creating a Group object 
+		      
+		       
+		      //Creating a Scene by passing the group object, height and width  
+			
+		      Scene scene = new Scene(group,700, 700);
+		      //group.getChildren().;
+		      
+		      level_page(4);
+		      //setting color to the scene 
+		      Button b1=new Button("submit ");
+		      b1.setScaleX(2);
+		      b1.setScaleY(2);
+		      b1.setLayoutX(120);
+		      b1.setLayoutY(350);
+		      TextField tx=new TextField();
+		      TextField tt=new TextField();
+		      tx.setLayoutX(180);
+		      tx.setLayoutY(100);
+		      tx.setScaleX(2);
+		      tx.setScaleY(2);
+		      tt.setScaleX(1.13);
+		      tt.setScaleY(1);
+		      tt.setText("enter password");
+		      tt.setFont(new Font(20));
+		      tt.setLayoutX(120);
+		      tt.setLayoutY(250);
+		      
+		      //TextView t1=new TextView();
+		      Text ttt=new Text();
+		      ttt.setText("Login page ");
+		      ttt.setFill(Color.AZURE);
+		      ttt.setFont(new Font(45));
+		      ttt.setX(180);
+		      ttt.setY(40);
+		      Text t1=new Text("Use the image keypad below ");
+		     t1.setFill(Color.BEIGE);
+		     t1.setFont(new Font(25));
+		    t1.setX(100);
+		    t1.setY(340);
+		      scene.setFill(Color.CORNFLOWERBLUE);
+		     // get_group();
+		     // my_first_page(0);
+		    // my_first_page(-1);
+		      
+		      tx.setText(" enter username");
+		     /* group.getChildren().add(tx);
+		      group.getChildren().add(b1);
+		      group.getChildren().add(ttt);
+		      group .getChildren().add(tt);
+		      */
+		      Button b11=new Button();
+		      b11.setText("1");
+		      b11.setLayoutX(200);
+		      b11.setLayoutY(400);
+		      b11.setScaleX(2.5);
+		      b11.setScaleY(2.5);
+		      
+		     // group.getChildren().add(t1);
+		     // group.getChildren().add(b11);
+		      
+		     tx.setPromptText(" hellow i am anupma ");
+		      //Setting the title to Stage. 
+		      primaryStage.setTitle("Sample Application");
+		 /* EventHandler <MouseEvent> eventhadler=new EventHandler<MouseEvent>() {
+		    	
+		    	public void handle(MouseEvent e)
+		    	{
+		    		//System.out.println("you have clicked mouse event ");
+		    	}
+		    	
+		    }
+		    
+		    //b1.addEventFilter(MouseEvent.MOUSE_CLICKED,eventhadler);
+		   //   */
+		      b1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		    	  public void handle(MouseEvent e)
+		    	  {
+		    		  System.out.print("heloow mouse ");
+		    	  }
+		      }
+		      
+		    		  );
+		      tx.setOnKeyPressed( new EventHandler<KeyEvent> () {
+		    	  public void handle(KeyEvent ke)
+		    	  {
+		    		  System.out.println(" key pressed ");
+		    		  tt.setText("we succesdd ");
+		    		  
+		    		  
+		    	  }
+		      });
+		      Random rand=new Random();
+		      int user_id=rand.nextInt();
+		      int pass=rand.nextInt();
+		     
+		      
+		      String user=Integer.toString(user_id);
+		      String pas=Integer.toString(pass);
+		      user+="hello i am anjpam ";
+		    user=Integer.toString( user.hashCode());
+		    pas=Integer.toString(pas.hashCode());
+		    System.out.println(user+pas+"   time "+System.nanoTime());
+		 
+		      database_class db=new database_class();
+		     // db.connect_to_database();
+		      int k=0;
+		     k=db.insert_into_database(user, pas);
+		      if(k==1)
+		    	  System.out.println("successfully registered ");
+		      else 
+		    	  System.out.println("failed to register");
+		      
+		      
+
+			
+			//	System.out.println("hello world");
+				
+		      
+		      		
+		      
+		      
+		      //Adding the scene to Stage 
+		      primaryStage.setScene(scene); 
+		       
+		      //Displaying the contents of the stage 
+		      primaryStage.show();
+	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	Text t11 =new Text();
+	public Group get_group()
+	{
+		Group gp =new Group();
+		Button b2=new Button();
+		
+		t11.setText("YOUR USERNAME WILL SHOWN HERE ");
+		t11.setLayoutX(100);
+		t11.setLayoutY(100);
+		t11.setFont(new Font(30));
+		t11.setFill(Color.WHITE);
+
+		
+		group.getChildren().add(t11);
+		Text t12 =new Text();
+		t12.setText("YOUR PASSWORD WILL SHOWN HERE ");
+		t12.setLayoutX(100);
+		t12.setLayoutY(200);
+		t12.setFont(new Font(30));
+		t12.setFill(Color.WHITE);
+		
+		group.getChildren().add(t12);
+		
+		
+		b2.setText("2");
+		b2.setScaleX(2.5);
+		b2.setScaleY(2.5);
+		b2.setLayoutX(300);
+		b2.setLayoutY(400);
+		Button b3=new Button();
+		b3.setText("3");
+		b3.setScaleX(2.5);
+		b3.setScaleY(2.5);
+		b3.setLayoutX(400);
+		b3.setLayoutY(400);
+		group.getChildren().add(b3);
+		Button b4=new Button();
+		b4.setText("4");
+		b4.setScaleX(2.5);
+		b4.setScaleY(2.5);
+		b4.setLayoutX(500);
+		b4.setLayoutY(400);
+		group.getChildren().add(b4);
+		Button b5=new Button();
+		b5.setText("5");
+		b5.setScaleX(2.5);
+		b5.setScaleY(2.5);
+		b5.setLayoutX(600);
+		b5.setLayoutY(400);
+		group.getChildren().add(b5);
+		Button b6=new Button();
+		b6.setText("6");
+		b6.setScaleX(2.5);
+		b6.setScaleY(2.5);
+		b6.setLayoutX(200);
+		b6.setLayoutY(500);
+		group.getChildren().add(b6);
+		Button b7=new Button();
+		b7.setText("7");
+		b7.setScaleX(2.5);
+		b7.setScaleY(2.5);
+		b7.setLayoutX(300);
+		b7.setLayoutY(500);
+		group.getChildren().add(b7);
+		Button b8=new Button();
+		b8.setText("8");
+		b8.setScaleX(2.5);
+		b8.setScaleY(2.5);
+		b8.setLayoutX(400);
+		b8.setLayoutY(500);
+		group.getChildren().add(b8);
+		Button b9=new Button();
+		b9.setText("9");
+		b9.setScaleX(2.5);
+		b9.setScaleY(2.5);
+		b9.setLayoutX(500);
+		b9.setLayoutY(500);
+		group.getChildren().add(b9);
+		Button b10=new Button();
+		b10.setText("0");
+		b10.setScaleX(2.5);
+		b10.setScaleY(2.5);
+		b10.setLayoutX(600);
+		b10.setLayoutY(500);
+		group.getChildren().add(b10);
+		group.getChildren().add(b2);
+		b2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			
+			public void handle(MouseEvent e)
+			{
+				String s123=b2.getText().toString();
+				change_text(b2,s123,t12);
+				
+			}
+
+			
+		}
+				
+				
+				
+				);
+		
+	
+		return gp;
+	}
+	public void my_first_page(int n)
+	{
+		if(n==-1)
+		{
+			group.getChildren().remove(b111);
+			group.getChildren().remove(b222);
+			return;
+		}
+	
+		b111.setText("USER");
+		b222.setText("ADMINISTRATOR");
+		b111.setLayoutX(240);
+		b111.setLayoutY(200);
+		b111.setFont(new Font(39));
+		b111.setTextFill(Color.BLUE);
+		b222.setLayoutX(200);
+		b222.setLayoutY(370);
+		b222.setFont(new Font(30));
+		
+		group.getChildren().add(b111);
+		group.getChildren().add(b222);
+		
+		
+		
+	}
+	
+	public void level_page(int n)
+	{
+		if(n==-1)
+		{
+			group.getChildren().remove(level_1);
+			group.getChildren().remove(level_2);
+			group.getChildren().remove(level_3);
+			return;
+		}
+		level_1.setText(" Level 1");
+		level_1.setFont(new Font(30));
+		level_1.setLayoutX(250);
+		level_1.setLayoutY(200);
+		group.getChildren().add(level_1);
+		level_2.setText(" Level 2");
+		level_2.setFont(new Font(30));
+		level_2.setLayoutX(250);
+		level_2.setLayoutY(300);
+		group.getChildren().add(level_2);
+		level_3.setText(" Level 3");
+		level_3.setFont(new Font(30));
+		level_3.setLayoutX(250);
+		level_3.setLayoutY(400);
+		group.getChildren().add(level_3);
+		
+		
+		
+	}
+	public void change_text(Button b,String s,Text t)
+	
+	
+	{
+		int k=Integer.parseInt(s);
+		int c=-1;
+		switch(k)
+		{
+		case 1:
+			c=1;
+			break;
+		case 2:
+			c=2;
+			break;
+		case 3:
+			c=3;
+			break;
+		case 4:
+			c=4;
+			break;
+		case 5:
+			c=5;
+			break;
+		case 6:
+			c=6;
+			break;
+		case 7:
+			c=7;
+			break;
+		case 8:
+			c=8;
+			break;
+		case 9:
+			c=9;
+			break;
+		default:
+			c=0;
+			break;
+		     
+		}
+		if(t.getText().toString().equals("YOUR PASSWORD WILL SHOWN HERE"))
+		t.setText(Integer.toString(c));
+		else
+		{
+			String sss=t.getText().toString();
+			sss+=c;
+			t.setText(sss);
+			group.getChildren().remove(t11);
+		}
+			
+		
+		
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+
+		String st="insert into my_database.train values(13123);";
+		  String jdbcUrl = "jdbc:mysql://localhost:3306/mysql";
+		    String username = "root";
+		    String password = "12345";
+		    Connection conn = null;
+		    Statement stmt = null;
+
+		    try {
+
+		      conn = DriverManager.getConnection(jdbcUrl, username, password);
+		      stmt = conn.createStatement();
+
+		      stmt.executeUpdate(st);
+
+		      System.out.println("Table created");
+
+		    } catch (SQLException e) {
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		System.out.println("hello world");
+		
+	}
+}
+
+ class database_class{
+	 
+		String st="insert into my_database.train values(13123);";
+		  String jdbcUrl = "jdbc:mysql://localhost:3306/mysql";
+		    String username = "root";
+		    String password = "12345";
+		    Connection conn = null;
+		    Statement stmt = null;
+
+	 
+	 public void connect_to_database()
+	 {
+		 
+				//launch(args);
+
+
+				    try {
+
+				      conn = DriverManager.getConnection(jdbcUrl, username, password);
+				      stmt = conn.createStatement();
+
+				      stmt.executeUpdate(st);
+
+				      System.out.println("Table created");
+
+				    } catch (SQLException e) {
+				      e.printStackTrace();
+				    } finally {
+				      try {
+				        // Close connection
+				        if (stmt != null) {
+				          stmt.close();
+				        }
+				        if (conn != null) {
+				          conn.close();
+				        }
+				      } catch (Exception e) {
+				        e.printStackTrace();
+				      }
+				    }
+				System.out.println("hello world");
+				
+			}
+	 public int insert_into_database(String user,String pass)
+	 {
+	     String state_Ment="insert into mydb.user_detail values"
+		      		+ "("
+		      		+ user+","
+		      				+ pass+");";
+	     
+	      
+		    try {
+
+			      conn = DriverManager.getConnection(jdbcUrl, username, password);
+			      stmt = conn.createStatement();
+
+			      stmt.executeUpdate(state_Ment);
+
+			      System.out.println("successfully register ");
+			      return 1;
+
+			    } catch (SQLException e) {
+			      e.printStackTrace();
+			      return 0;
+			    } finally {
+			      try {
+			        // Close connection
+			        if (stmt != null) {
+			          stmt.close();
+			        }
+			        if (conn != null) {
+			          conn.close();
+			        }
+			      } catch (Exception e) {
+			        e.printStackTrace();
+			      }
+			    }
+		 
+		 
+	 }
+	 }
+
+	
+
+
