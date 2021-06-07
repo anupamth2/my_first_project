@@ -1,0 +1,612 @@
+package application;
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+public class my_database_class  extends Application{
+
+	String st="insert into my_database.train values(189063);";
+	  String jdbcUrl = "jdbc:mysql://localhost:3306/mysql";
+	    String username = "root";
+	    String password = "12345";
+	    Connection conn = null;
+	    Statement stmt = null;
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
+	public void  insert_into_issued(String book_id ,String student_id)
+	{
+		try {
+			conn = DriverManager.getConnection(jdbcUrl, username, password);
+		      
+		      stmt = conn.createStatement();
+		      String issue_details=" insert into mydb.issued(issued_id,start_time,end_time,book_id,student_id)"+"values(?,?,?,?,?);";
+		      PreparedStatement pr = conn.prepareStatement(issue_details);
+		      pr.setString(1, book_id);
+		      pr.setString(2, password);
+		    //  pr.execute();
+		
+		}catch (SQLException e) {
+			
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		
+	}
+	
+	
+	public ArrayList<String> find_book(String name)
+	{
+		 ArrayList<String > arr=new ArrayList<String>();
+		try {
+			conn = DriverManager.getConnection(jdbcUrl, username, password);
+		      
+		      stmt = conn.createStatement();
+		      String find_="select * from mydb.books where name=?";
+		      
+		      PreparedStatement pr=conn.prepareStatement(find_);
+		      pr.setString(1, name);
+		     
+		      ResultSet rs=pr.executeQuery();
+		      while(rs.next())
+		      {
+		    	  arr.add(rs.getString(1));
+		      }
+		      System.out.println(arr.toString());
+		      return arr;
+			
+		}catch (SQLException e) {
+			
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		return arr;
+	}
+	public int verify_login(String username1,String password1)
+	{
+		try
+		{
+			   conn = DriverManager.getConnection(jdbcUrl, username, password);
+			      
+			      stmt = conn.createStatement();
+			      String verify_command="select * from mydb.useres where id=? and pass=?";
+			      PreparedStatement pr=conn.prepareStatement(verify_command);
+			      pr.setString(1, password1);
+			      pr.setString(2, username1);
+			      ArrayList<String>  arr=new ArrayList<String>();
+			     ResultSet rs=pr.executeQuery();
+			    // CursorSet
+			     while(rs.next())
+			     {
+			    	 arr.add(rs.getString(1));
+			     }
+			     if(arr.size()>0)
+			     {
+			    	 System.out.println("successfully verified");
+			    	 return 1;
+			     }
+			     else
+			     {
+			    	 System.out.println("longin failed ");
+			    	 return 0;
+			     }
+			      
+		}catch (SQLException e) {
+			
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		return 1;
+	}
+	public void send_to_database(ArrayList<String>arr,int index,int kk)
+	{
+
+
+		    try {
+		    	/*String my_command = "insert into mydb.users values("+arr.get(0)
+		    	+","
+		    			+arr.get(1)
+		    			+","
+		    			+arr.get(2)+","
+		    			+arr.get(3)+","
+		    			+index+");";
+		    			*/
+		    	String my_command = "insert into mydb.useres (Name,id,pass,email,profession)"+"values(?,?,?,?,?);";
+		    	String book_regis="insert into mydb.books(Name,id,publication,Date_of_buy)"+"values(?,?,?,?);";
+		 
+		      conn = DriverManager.getConnection(jdbcUrl, username, password);
+		      
+		      stmt = conn.createStatement();
+		      
+		     	if(kk==-1)
+		    	{
+		    		PreparedStatement ps=conn.prepareStatement(book_regis);
+		    		ps.setString(1, arr.get(0));
+		    		ps.setString(2, arr.get(1));
+		    		ps.setString(3, arr.get(2));
+		    		ps.setString(4, arr.get(3));
+		    		ps.execute();
+		    	}
+
+		      if(kk==1)
+		      {
+		      PreparedStatement pst=conn.prepareStatement(my_command);
+		      pst.setString(1, arr.get(0));
+		      pst.setString(2, arr.get(1));
+		      pst.setString(3, arr.get(2));
+		      pst.setString(4, arr.get(3));
+		      pst.setInt(5, index);
+		      
+		      pst.execute();
+		      }
+
+		      //stmt.executeUpdate(my_command);
+
+		      System.out.println("Table created");
+
+		    } catch (SQLException e) {
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		System.out.println("hello world");
+	
+	}
+	
+	Group group = new Group();
+	TextField tf1=new TextField();
+	TextField tf2=new TextField();
+	Button b1=new Button();
+	
+	//Sign up variable start from here 
+	
+	Text ts1=new Text("SIGN UP PAGE ");
+	TextField tsf1=new TextField();
+	TextField tsf3=new TextField();
+	TextField tsf2=new TextField();
+	TextField tsf4=new TextField();
+	
+	ToggleGroup tp=new ToggleGroup();
+
+    RadioButton rs1=new RadioButton("FACULTY");
+    RadioButton rs2=new RadioButton("STUDENT");
+    RadioButton rs3=new RadioButton("EMPLOYEE");
+    Button bts1=new Button();
+	//Sign up variable end here
+    
+    //find book variable start here
+    
+	Text tsea=new Text("FIND BOOK");
+	TextField tfsea1=new TextField();
+	
+	Button bss1=new Button();
+	
+    
+    //find book variable end here 
+	//Register book varailbe start here
+	Text rt4=new Text("REGISTER BOOK ");
+	TextField atsf1=new TextField();
+	TextField atsf2=new TextField();
+	TextField atsf3=new TextField();
+	TextField atsf4=new TextField();
+	Button abts1=new Button();
+	//Register book variable end here 
+
+	
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		// TODO Auto-generated method stub
+		log_in();
+		remove_log_in();
+	   sign_up();
+		remove_sign_up();
+		search_book();
+		remove_search_book();
+	register_book();
+	remove_register_book();
+		set_first_page();
+		
+		
+		
+		
+		 Text t1=new Text("LIBRARY MANAGEMENT SYSTEM");
+		 t1.setLayoutX(70);
+		 t1.setLayoutY(100);
+		 t1.setFont(new Font(40));
+		 t1.setFill(Color.WHITE);
+		 t1.setFont(new Font(40));
+		 group.getChildren().add(t1);
+		Text t2=new Text("VIT Vellore");
+		t2.setLayoutX(270);
+		t2.setLayoutY(130);
+		t2.setFill(Color.WHITE);
+		t2.setFont(new Font(26));
+		Text t3=new Text("18BIT0003");
+		t3.setFill(Color.ANTIQUEWHITE);
+		t3.setFont(new Font(28));
+		t3.setLayoutX(100);
+		t3.setLayoutY(650);
+		Text t4=new Text("ANUPAM KUMAR THAKUR");
+		t4.setFont(new Font(28));
+		t4.setFill(Color.WHITE);
+		t4.setLayoutX(290);
+		t4.setLayoutY(650);
+		group.getChildren().add(t4);
+		group.getChildren().add(t3);
+		group.getChildren().add(t2);
+		 Scene scene = new Scene(group,700, 700);
+		 scene.setFill(Color.GREEN);
+	      primaryStage.setScene(scene); 
+		       
+		      //Displaying the contents of the stage 
+		      primaryStage.show();
+		
+		
+	}
+	public void set_first_page()
+	{
+		Button b111=new Button("ADMINISTRATOR");
+		b111.setFont(new Font(30));
+		b111.setLayoutX(100);
+		b111.setLayoutY(500);
+		group.getChildren().add(b111);
+		Button b1111=new Button("USERS");
+		b1111.setFont(new Font(30));
+		b1111.setLayoutX(500);
+		b1111.setLayoutY(500);
+		group.getChildren().add(b1111);
+	}
+	public void remove_register_book()
+	{
+		group.getChildren().remove(rt4);
+		group.getChildren().remove(atsf1);
+		group.getChildren().remove(atsf2);
+		group.getChildren().remove(atsf3);
+		group.getChildren().remove(atsf4);
+		group.getChildren().remove(abts1);
+		
+	}
+	public void register_book()
+	{
+	
+		rt4.setFont(new Font(28));
+		rt4.setFill(Color.WHITE);
+		rt4.setLayoutX(200);
+		rt4.setLayoutY(200);
+		group.getChildren().add(rt4);
+		
+		atsf1.setText("Enter Book Name");
+		atsf1.setLayoutX(220);
+		atsf1.setLayoutY(220);
+		atsf1.setFont(new Font(15));
+		group.getChildren().add(atsf1);
+		
+		atsf3.setText("Enter Book ID");
+		atsf3.setLayoutX(220);
+		atsf3.setLayoutY(270);
+		atsf3.setFont(new Font(15));
+		group.getChildren().add(atsf3);
+		
+	
+		atsf2.setText("Enter publication");
+		atsf2.setLayoutX(220);
+		atsf2.setLayoutY(320);
+		atsf2.setFont(new Font(15));
+		group.getChildren().add(atsf2);
+
+		atsf4.setText("Enter Date of Buy");
+		atsf4.setLayoutX(220);
+		atsf4.setLayoutY(370);
+		atsf4.setFont(new Font(15));
+		group.getChildren().add(atsf4);
+		
+		  abts1.setText("SUBMIT");
+		  abts1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			  public void handle(MouseEvent e1)
+			  {
+				  ArrayList<String> arr=new ArrayList<>();
+				  arr.add(atsf1.getText());
+				  arr.add(atsf3.getText());
+				  arr.add(atsf2.getText());
+				  arr.add(atsf4.getText());
+				  send_to_database(arr,1,-1);
+			  }
+			  
+		  });
+	        abts1.setLayoutX(220);
+	        abts1.setLayoutY(450);
+	        group.getChildren().add(abts1);
+		
+		
+	}
+	public void search_book()
+	{
+	
+		tfsea1.setFont(new Font(20));
+		tfsea1.setLayoutX(200);
+		tfsea1.setLayoutY(300);
+		tfsea1.setText("Enter the name of book");
+		
+		tsea.setLayoutX(200);
+		tsea.setLayoutY(280);
+		tsea.setFont(new Font(30));
+		tsea.setFill(Color.RED);
+	
+		bss1.setText("SUBMIT");
+		bss1.setLayoutX(250);
+		bss1.setLayoutY(390);
+		bss1.setOnMouseClicked(new EventHandler <MouseEvent>(){
+			public void handle(MouseEvent e)
+			{
+				ArrayList<String> arr=new ArrayList<String> ();
+				arr=find_book(tfsea1.getText());
+				if(arr.size()>0)
+					{
+					          Button  ttt=new Button();
+					          ttt.setText("Book Founded : "+arr.get(0));
+					          ttt.setLayoutX(200);
+					          ttt.setLayoutY(450);
+					          ttt.setFont(new Font(20));
+					         String s="02/06/2021";
+					         ttt.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					        	 public void handle(MouseEvent e)
+					        	 {
+					        		 Text t22=new Text("your book is issued on "+s+" return before 15 days ");
+					        		 t22.setLayoutX(100);
+					        		 t22.setLayoutY(520);
+					        		 t22.setFill(Color.WHITE);
+					        		 t22.setFont(new Font(20));
+					        		 group.getChildren().add(t22);
+					        		 insert_into_issued("18BIT0003","435566");
+					        	 }
+					         });
+					       
+					          
+					          group.getChildren().add(ttt);
+					          
+							System.out.println("we have successfully find the book");
+					}
+				else
+					System.out.println("book is not foudn ");
+			}
+		});
+		bss1.setFont(new Font(22));
+		
+		group.getChildren().add(bss1);
+		
+		group.getChildren().add(tfsea1);
+		group.getChildren().add(tsea);
+		
+		
+	}
+
+	public void remove_search_book()
+	{
+		group.getChildren().remove(tsea);
+		group.getChildren().remove(tfsea1);
+		group.getChildren().remove(bss1);
+	
+		
+	}
+	public void log_in()
+	{
+		
+	
+		tf1.setLayoutX(200);
+		tf1.setLayoutY(200);
+		tf1.setText("Enter the Username");
+		tf1.setFont(new Font(20));
+		group.getChildren().add(tf1);
+		
+		tf2.setLayoutX(200);
+		tf2.setLayoutY(300);
+		tf2.setText("Enter the Password");
+		tf2.setFont(new Font(20));
+		group.getChildren().add(tf2);
+		
+		b1.setText("SUBMIT");
+		b1.setLayoutX(200);
+		b1.setLayoutY(400);
+		b1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent ee)
+			{
+				String username=tf1.getText();
+				String password=tf2.getText();
+				verify_login(username,password);
+			}
+		});
+		group.getChildren().add(b1);
+		
+		
+		
+		
+	}
+
+	public void remove_log_in()
+	{
+		group.getChildren().remove(b1);
+		group.getChildren().remove(tf1);
+		group.getChildren().remove(tf2);
+		
+	}
+	
+	
+	public void sign_up()
+	{
+
+		ts1.setFill(Color.RED);
+		ts1.setFont(new Font(30));
+		ts1.setLayoutX(225);
+		ts1.setLayoutY(170);
+		group.getChildren().add(ts1);
+		
+		tsf1.setText("Enter Name");
+		tsf1.setLayoutX(220);
+		tsf1.setLayoutY(220);
+		tsf1.setFont(new Font(15));
+		group.getChildren().add(tsf1);
+		
+		tsf3.setText("Enter ID");
+		tsf3.setLayoutX(220);
+		tsf3.setLayoutY(270);
+		tsf3.setFont(new Font(15));
+		group.getChildren().add(tsf3);
+		
+	
+		tsf2.setText("Enter password");
+		tsf2.setLayoutX(220);
+		tsf2.setLayoutY(320);
+		tsf2.setFont(new Font(15));
+		group.getChildren().add(tsf2);
+
+		tsf4.setText("Enter Email");
+		tsf4.setLayoutX(220);
+		tsf4.setLayoutY(370);
+		tsf4.setFont(new Font(15));
+		group.getChildren().add(tsf4);
+		
+        
+        rs3.setTextFill(Color.ANTIQUEWHITE);
+        rs3.setFont(new Font(15));
+       rs3.setLayoutX(460);
+       rs3.setLayoutY(420);
+        rs3.setToggleGroup(tp);
+        rs3.setTextFill(Color.ANTIQUEWHITE);
+        rs1.setFont(new Font(15));
+       rs1.setLayoutX(220);
+       rs1.setLayoutY(420);
+       rs1.setTextFill(Color.ANTIQUEWHITE);
+        rs1.setToggleGroup(tp);
+        rs2.setTextFill(Color.ANTIQUEWHITE);
+        rs2.setFont(new Font(15));
+       rs2.setLayoutX(340);
+       rs2.setLayoutY(420);
+        rs1.setToggleGroup(tp);
+        
+        rs2.setToggleGroup(tp);
+        group.getChildren().add(rs3);
+        group.getChildren().add(rs2);
+        group.getChildren().add(rs1);
+       
+        bts1.setText("SUBMIT");
+        bts1.setLayoutX(220);
+        bts1.setLayoutY(450);
+        bts1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        	public void handle(MouseEvent e)
+        	{
+        		ArrayList<String> arr=new ArrayList<>();
+        		System.out.println("we have clicked submit ");
+        		//arr.add(ts1.getText().toString());
+        		arr.add(tsf1.getText().toString());
+        		arr.add(tsf2.getText().toString());
+        		arr.add(tsf3.getText().toString());
+        		arr.add(tsf4.getText().toString());
+        		int k=1;
+        		try {
+        		if(tp.getSelectedToggle().equals(rs1))
+        			k=1;
+        		else if(tp.getSelectedToggle().equals(rs2))
+        			k=2;
+        		else
+        			k=3;
+        		System.out.println("the k is "+k);
+        		send_to_database(arr,k,1);
+        		
+        		}
+        		catch(Exception e11)
+        		{
+        			System.out.println("the error is "+e11);
+        		}
+       
+        		
+        		
+        		
+        	}
+        });
+        group.getChildren().add(bts1);
+        
+        
+		
+		
+		
+	
+	}
+    public void remove_sign_up()
+    {
+    	group.getChildren().remove(ts1);
+    	group.getChildren().remove(tsf1);
+    	group.getChildren().remove(tsf2);
+    	group.getChildren().remove(tsf3);
+    	group.getChildren().remove(tsf4);
+    	group.getChildren().remove(bts1);
+    	group.getChildren().remove(rs1);
+    	group.getChildren().remove(rs2);
+    	group.getChildren().remove(rs3);
+    	
+    	
+    }
+}
+
