@@ -1,0 +1,594 @@
+package application;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.sql.ResultSet;
+
+public class my_review extends Application {
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("you are welcome");
+	//	my_db mydb=new my_db();
+		//mydb.my_db_fun();
+		launch();
+		
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		// TODO Auto-generated method stub
+		
+		
+	 my_ui ui1=new my_ui();
+	Group gp=ui1.set_ui();
+	  gp=ui1.set_login_ui();
+	 Scene scene=new Scene(gp,1485,725);
+		scene.setFill(Color.BLACK);
+		
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
+	}
+}
+class my_db
+{
+	String st="insert into my_database.train values(189063);";
+	  String jdbcUrl = "jdbc:mysql://localhost:3306/mysql";
+	    String username = "root";
+	    String password = "12345";
+	    Connection conn = null;
+	    Statement stmt = null;
+	public void my_db_fun(String s1)
+	{
+		
+		
+		try {
+			conn = DriverManager.getConnection(jdbcUrl, username, password);
+		      
+		      stmt = conn.createStatement();
+		      //String issue_details=" insert into mydb.issued(issued_id,start_time,end_time,book_id,student_id)"+"values(?,?,?,?,?);";
+		     // PreparedStatement pr = conn.prepareStatement(issue_details);
+		      PreparedStatement prr=conn.prepareStatement("SELECT * FROM my_database.train WHERE train_no = 1 AND 1=1");
+		     ResultSet set=prr.executeQuery(s1);
+		     
+		      ArrayList<String > arr=new ArrayList<>();
+		      while(set.next())
+		      {
+		    	  arr.add(set.getString(1));
+		      }
+		      System.out.println("hello you are welcome "+arr);
+		     String command=" select * from mydb.train";
+		     
+		   
+		    boolean cr=true;
+		    if(cr==true)
+		    {
+		    	System.out.println("succesfully excecutec ");
+		    }
+		    //  pr.setString(1, book_id);
+		     // pr.setString(2, password);
+		    //  pr.execute();
+		
+		}catch (SQLException e) {
+			
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		
+
+	}
+
+
+}
+
+class my_ui
+{
+	Color front=Color.WHITE;
+	Color back=Color.BLACK;
+	Group gp=new Group();
+	
+	int user_set=1;
+	int pass_set=0;
+	String user_id="";
+	String pass_id="";
+	
+	Text tx4=new Text("username =  ");
+	Text tx5=new Text("password =  ");
+	ArrayList<String > user=new ArrayList<>();
+	ArrayList<String> pass=new ArrayList<>();
+ 	
+	
+	
+	
+	public Group set_login_ui()
+	{
+		//Group gp=new Group();
+		
+		Text tx1=new Text("LOG IN");
+		tx1.setFont(new Font(40));
+		tx1.setLayoutX(200);
+		tx1.setLayoutY(140);
+		tx1.setFill(front);
+		gp.getChildren().add(tx1);
+		
+		
+		TextField tf1=new TextField();
+		tf1.setText("enter the user name ");
+		tf1.setFont(new Font(20));
+		tf1.setLayoutX(140);
+		tf1.setLayoutY(220);
+		gp.getChildren().add(tf1);
+		
+		TextField tf2=new TextField();
+		tf2.setText("enter the password ");
+		tf2.setFont(new Font(20));
+		tf2.setLayoutX(140);
+		tf2.setLayoutY(290); 
+		gp.getChildren().add(tf2);
+		
+		Button b1=new Button();
+		b1.setText("SUBMIT");
+		b1.setFont(new Font(22));
+		b1.setLayoutX(140);
+		b1.setLayoutY(400);
+		gp.getChildren().add(b1);
+		
+		Button b123=new Button();
+		b123.setText("Generate Ascii");
+		b123.setFont(new Font(22));
+		b123.setLayoutX(280);
+		b123.setLayoutY(400);
+		gp.getChildren().add(b123);
+		
+		b123.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				String s1=tf1.getText();
+				String s2=tf2.getText();
+				String s11="";
+				String s12="";
+				for(int i=0;i<s1.length();i++)
+				{
+					int a=(int)s1.charAt(i);
+					s11+=a;
+					
+					
+				}
+				for(int i=0;i<s2.length();i++)
+				{
+					int a=(int)s2.charAt(i);
+					s12+=a;
+					
+					
+				}
+				System.out.println(s11+"\n "+s12);
+				user_id=s11;
+				pass_id=s12;
+				String ss=tx4.getText();
+				String pp=tx5.getText();
+				ss+=s11;
+				pp+=s12;
+				tx4.setText(ss);
+				tx5.setText(pp);
+				
+			}
+		
+		});
+
+		
+		Text tx3=new Text("");
+		tx3.setFont(new Font(20));
+		tx3.setLayoutX(200);
+		tx3.setFill(front);
+		tx3.setLayoutY(500);
+		gp.getChildren().add(tx3);
+		b1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent  e)
+			{
+				System.out.println(" we have clicked  ");
+				String s1=tf1.getText();
+				String s2=tf2.getText();
+				
+				int k=verify_login(s1, s2,0);
+				if(k==1)
+				{
+					tx3.setText("successfully login");
+				}
+				else
+				{
+					tx3.setText("Login failed ");
+				}
+				
+			}
+			
+		});
+		
+		return gp;
+		
+	}
+	
+	public Group set_ui()
+	{
+		
+		//Group gp=new Group();
+		Text tx1=new Text("ASCII BASED LOGIN");
+		tx1.setLayoutX(629);
+		tx1.setLayoutY(102);
+		tx1.setFill(front);
+		tx1.setFont(new Font(60));
+		gp.getChildren().add(tx1);
+		
+		Text tx2=new Text("#USE ASCII TABLE ON LEFT");
+		tx2.setLayoutX(629);
+		tx2.setLayoutY(142);
+		tx2.setFill(front);
+		tx2.setFont(new Font(25));
+		gp.getChildren().add(tx2);
+		
+		Text TX3=new Text("#If username = Anupam  then convert it  ascii like \n A=65   n =110 p=112 and continue till end\n Anupam=6511011211711297109 ");
+		TX3.setLayoutX(629);
+		TX3.setLayoutY(192);
+		TX3.setFill(front);
+		TX3.setFont(new Font(20));
+		gp.getChildren().add(TX3);
+		Text tce=new Text(" ");
+		tce.setLayoutX(1229);
+		tce.setLayoutY(442);
+		tce.setFill(front);
+		tce.setFont(new Font(25));
+		gp.getChildren().add(tce);
+		
+		
+		
+		tx4.setLayoutX(629);
+		tx4.setLayoutY(290);
+		tx4.setFill(front);
+		tx4.setFont(new Font(36));
+		gp.getChildren().add(tx4);
+		
+	
+		tx5.setLayoutX(629);
+		tx5.setLayoutY(360);
+		tx5.setFill(front);
+		tx5.setFont(new Font(36));
+		gp.getChildren().add(tx5);
+		
+		
+		Button b1=new Button("1");
+		b1.setLayoutX(629);
+		b1.setLayoutY(400);
+		b1.setFont(new Font(30));
+		gp.getChildren().add(b1);
+		
+		Button b2=new Button("2");
+		b2.setLayoutX(709);
+		b2.setLayoutY(400);
+		b2.setFont(new Font(30));
+		gp.getChildren().add(b2);
+		
+		Button b3=new Button("3");
+		b3.setLayoutX(789);
+		b3.setLayoutY(400);
+		b3.setFont(new Font(30));
+		gp.getChildren().add(b3);
+		
+		
+		Button b4=new Button("4");
+		b4.setLayoutX(869);
+		b4.setLayoutY(400);
+		b4.setFont(new Font(30));
+		gp.getChildren().add(b4);
+		
+		
+		Button b5=new Button("5");
+		b5.setLayoutX(629);
+		b5.setLayoutY(500);
+		b5.setFont(new Font(30));
+		gp.getChildren().add(b5);
+		
+		Button b6=new Button("6");
+		b6.setLayoutX(709);
+		b6.setLayoutY(500);
+		b6.setFont(new Font(30));
+		gp.getChildren().add(b6);
+		
+		Button b7=new Button("7");
+		b7.setLayoutX(789);
+		b7.setLayoutY(500);
+		b7.setFont(new Font(30));
+		gp.getChildren().add(b7);
+		
+		Button b8=new Button("8");
+		b8.setLayoutX(869);
+		b8.setLayoutY(500);
+		b8.setFont(new Font(30));
+		gp.getChildren().add(b8);
+		
+		Button b9=new Button("9");
+		b9.setLayoutX(629);
+		b9.setLayoutY(600);
+		b9.setFont(new Font(30));
+		gp.getChildren().add(b9);
+		
+		Button b10=new Button("0");
+		b10.setLayoutX(709);
+		b10.setLayoutY(600);
+		b10.setFont(new Font(30));
+		gp.getChildren().add(b10);
+		
+		Button b11=new Button("SUBMIT");
+		b11.setLayoutX(789);
+		b11.setLayoutY(600);
+		b11.setFont(new Font(30));
+		gp.getChildren().add(b11);
+		b11.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				
+				int k1=verify_login(user_id, pass_id,1);
+				if(k1==1)
+				{
+					tce.setText("Log in successfull");
+				}
+				else
+					tce.setText("Login failed ");
+				System.out.println("you have clicked submit");
+				
+			}
+			
+		});
+		
+		Button B12=new Button("PASSWORD");
+		B12.setLayoutX(959);
+		B12.setLayoutY(600);
+		B12.setFont(new Font(30));
+		gp.getChildren().add(B12);
+		
+		Button B13=new Button("USER");
+		B13.setLayoutX(959);
+		B13.setLayoutY(500);
+		B13.setFont(new Font(30));
+		gp.getChildren().add(B13);
+	
+		
+		b1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(1);
+			}
+			
+		});
+		
+		b2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(2);
+			}
+			
+		});
+		
+		b3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(3);
+			}
+			
+		});
+		
+		b4.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(4);
+			}
+			
+		});
+		
+		b5.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(5);
+			}
+			
+		});
+		
+		b6.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(6);
+			}
+			
+		});
+		
+		b7.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(7);
+			}
+			
+		});
+		
+		b8.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(8);
+			}
+			
+		});
+		
+		b9.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(9);
+			}
+			
+		});
+		
+		b10.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e1)
+			{
+				fun(0);
+			}
+			
+		});
+		
+		
+		B13.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			
+			public void handle(MouseEvent e)
+			{
+				user_set=1;
+				pass_set=0;
+			}
+		});
+
+		B12.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			
+			public void handle(MouseEvent e)
+			{
+				user_set=0;
+				pass_set=1;
+			}
+		});
+		
+		
+		return gp;
+		
+	}
+	public int verify_login(String username1,String password1,int kk)
+	{
+		String st="insert into my_database.train values(189063);";
+		  String jdbcUrl = "jdbc:mysql://localhost:3306/mysql";
+		    String username = "root";
+		    String password = "12345";
+		    Connection conn = null;
+		    Statement stmt = null;
+		try
+		{
+			if(kk==1)
+			{
+				int b=0;
+				for(int i=0;i<username1.length();i++)
+				{
+					   int a=(int) username1.charAt(i);
+					   if(a<48 && a>57)
+						   b=1;
+					   
+				}
+				for(int j=0;j<password1.length();j++)
+				{
+					int a=(int)password1.charAt(j);
+					if( a<48 && a>57)
+						b=1;
+				}
+				if(b==1)
+				{
+					return 0;
+				}
+			}
+			   conn = DriverManager.getConnection(jdbcUrl, username, password);
+			      
+			      stmt = conn.createStatement();
+			      String verify_command="select * from mydb.useres where id="+password1+" and pass="+username1+";";
+			      PreparedStatement pr=conn.prepareStatement(verify_command);
+			   //   pr.setString(1, password1);
+			    //  pr.setString(2, username1);
+			      ArrayList<String>  arr=new ArrayList<String>();
+			     ResultSet rs=pr.executeQuery();
+			    // CursorSet
+			     while(rs.next())
+			     {
+			    	 arr.add(rs.getString(1));
+			     }
+			     if(arr.size()>0)
+			     {
+			    	 System.out.println("successfully verified");
+			    	 return 1;
+			     }
+			     else
+			     {
+			    	 System.out.println("longin failed ");
+			    	 return 0;
+			     }
+			      
+		}catch (SQLException e) {
+			
+		      e.printStackTrace();
+		    } finally {
+		      try {
+		        // Close connection
+		        if (stmt != null) {
+		          stmt.close();
+		        }
+		        if (conn != null) {
+		          conn.close();
+		        }
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		return 1;
+	}
+	void fun(int a)
+	{
+		String a1=Integer.toString(a);
+		if(user_set==1&&pass_set==0)
+		{
+			System.out.println("you have clicked  for user"+a);
+		String  s1=tx4.getText();
+		user_id+=a1;
+		
+		user.add(a1);
+		s1+=a1;
+		tx4.setText(s1);
+		
+			
+		}
+		else
+			{
+			pass.add(a1);
+			pass_id+=a1;
+			     String s1=tx5.getText();
+			     s1+=a;
+			     tx5.setText(s1);
+			       System.out.println("you have clicked for pass "+a);
+			}
+			
+	}
+}
